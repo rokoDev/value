@@ -1,11 +1,11 @@
-#ifndef rabbit_value_h
-#define rabbit_value_h
+#ifndef value_h
+#define value_h
 
 #include <interval/interval.h>
 
 #include <boost/leaf.hpp>
 
-namespace rabbit
+namespace value
 {
 namespace leaf = boost::leaf;
 
@@ -84,6 +84,6 @@ class Value<interval::Min<MinV>, interval::Max<MaxV>, DefaultV>
     constexpr Value(value_type aValue) noexcept : value_(aValue) {}
     value_type value_{kDefault};
 };
-}  // namespace rabbit
+}  // namespace value
 
-#endif /* rabbit_value_h */
+#endif /* value_h */

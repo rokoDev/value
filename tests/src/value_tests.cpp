@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-
-#include "rabbit/value.h"
+#include <value/value.h>
 
 namespace leaf = boost::leaf;
 
@@ -22,10 +21,10 @@ int execute(CallableT &&aArg) noexcept
 {
     const auto r = leaf::try_handle_all(
         aArg,
-        [](leaf::match<rabbit::value_error, rabbit::value_error::less_than_min>)
-        { return to_underlying(rabbit::value_error::less_than_min); },
-        [](leaf::match<rabbit::value_error, rabbit::value_error::more_than_max>)
-        { return to_underlying(rabbit::value_error::more_than_max); },
+        [](leaf::match<value::value_error, value::value_error::less_than_min>)
+        { return to_underlying(value::value_error::less_than_min); },
+        [](leaf::match<value::value_error, value::value_error::more_than_max>)
+        { return to_underlying(value::value_error::more_than_max); },
         [](leaf::error_info const &unmatched)
         {
             std::cerr << "Unknown failure detected: " << unmatched << std::endl;
@@ -45,7 +44,7 @@ class ValueTest<interval::Min<MinV>, interval::Max<MaxV>, DefaultV>
    public:
     ValueTest() = default;
     using ValueT =
-        rabbit::Value<interval::Min<MinV>, interval::Max<MaxV>, DefaultV>;
+        value::Value<interval::Min<MinV>, interval::Max<MaxV>, DefaultV>;
 
    protected:
     ValueT value_;
@@ -54,7 +53,7 @@ class ValueTest<interval::Min<MinV>, interval::Max<MaxV>, DefaultV>
 using TestValueInRange10To20 =
     ValueTest<interval::Min<10>, interval::Max<20>, 14>;
 using ValueInRange10_20 =
-    rabbit::Value<interval::Min<10>, interval::Max<20>, 14>;
+    value::Value<interval::Min<10>, interval::Max<20>, 14>;
 
 #ifdef BOOST_LEAF_NO_EXCEPTIONS
 
@@ -80,7 +79,7 @@ struct source_location;
 
 TEST(ValueTest, MakeValidValue)
 {
-    result<ValueInRange10_20> r = rabbit::make_value<ValueInRange10_20>(15);
+    result<ValueInRange10_20> r = value::make_value<ValueInRange10_20>(15);
     ASSERT_TRUE(r.has_value());
     ASSERT_EQ(r.value().get(), 15);
 }
@@ -91,10 +90,10 @@ TEST(ValueTest, MakeInvalidValue1)
         [&]() -> result<int>
         {
             result<ValueInRange10_20> value =
-                rabbit::make_value<ValueInRange10_20>(5);
+                value::make_value<ValueInRange10_20>(5);
             return value.has_value() ? result<int>{0} : value.error();
         });
-    ASSERT_EQ(r, to_underlying(rabbit::value_error::less_than_min));
+    ASSERT_EQ(r, to_underlying(value::value_error::less_than_min));
 }
 
 TEST(ValueTest, MakeInvalidValue2)
@@ -103,10 +102,10 @@ TEST(ValueTest, MakeInvalidValue2)
         [&]() -> result<int>
         {
             result<ValueInRange10_20> value =
-                rabbit::make_value<ValueInRange10_20>(21);
+                value::make_value<ValueInRange10_20>(21);
             return value.has_value() ? result<int>{0} : value.error();
         });
-    ASSERT_EQ(r, to_underlying(rabbit::value_error::more_than_max));
+    ASSERT_EQ(r, to_underlying(value::value_error::more_than_max));
 }
 
 TEST_F(TestValueInRange10To20, SetValidValue)
@@ -124,7 +123,7 @@ TEST_F(TestValueInRange10To20, SetValueLessThanMin)
             result<void> sr = value_.set(9);
             return sr ? result<int>{0} : sr.error();
         });
-    ASSERT_EQ(r, to_underlying(rabbit::value_error::less_than_min));
+    ASSERT_EQ(r, to_underlying(value::value_error::less_than_min));
     ASSERT_EQ(value_.get(), ValueT::kDefault);
 }
 
@@ -136,7 +135,7 @@ TEST_F(TestValueInRange10To20, SetValueMoreThanMax)
             result<void> sr = value_.set(25);
             return sr ? result<int>{0} : sr.error();
         });
-    ASSERT_EQ(r, to_underlying(rabbit::value_error::more_than_max));
+    ASSERT_EQ(r, to_underlying(value::value_error::more_than_max));
     ASSERT_EQ(value_.get(), ValueT::kDefault);
 }
 

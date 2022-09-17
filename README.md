@@ -1,8 +1,8 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-| **`Windows`** | **`Linux(x86)`** |
+| **`Windows`** | **`Linux`** |
 |:-----------------:|:-----------------:|
-
+[![Build status](https://ci.appveyor.com/api/projects/status/v17jxa32qmyikdmp/branch/develop?svg=true)](https://ci.appveyor.com/project/rokoDev/value/branch/develop)|[![CircleCI](https://dl.circleci.com/status-badge/img/gh/rokoDev/value/tree/develop.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/rokoDev/value/tree/develop)|
 # value
 
 ## Common prerequisites
